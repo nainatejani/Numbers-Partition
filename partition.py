@@ -40,7 +40,6 @@ class MaxHeap:
   
     # Function to heapify the node at pos 
     def maxHeapify(self, pos): 
-        print(pos)
   
         # If the node is a non-leaf node and greater 
         # than any of its child 
@@ -128,16 +127,10 @@ def karmarkar(S):
             maxHeap.maxHeapify(1)
             # print(maxHeap.Heap)
         
-
-            
-        
-
-
-        
-
         # maxHeap.maxHeap()
-    # print(maxHeap.Heap[1:])
+
     return maxHeap.Heap[1]
+
 
 
   
@@ -159,7 +152,7 @@ if __name__ == "__main__":
     # maxHeap.Print() 
     # print("The Min val is " + str(maxHeap.remove()))
 
-    karmarkar([2,1,4,3,6,5]) 
+    print(karmarkar([2,1,4,3,6,5]))
 
 
 
