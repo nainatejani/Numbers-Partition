@@ -1,5 +1,6 @@
 import sys 
-  
+import random
+
 class MaxHeap: 
   
     def __init__(self, maxsize): 
@@ -105,9 +106,10 @@ class MaxHeap:
 
 def karmarkar(S):
     length = len(S)
-    maxHeap = MaxHeap(20)
+    maxHeap = MaxHeap(200)
     for i in range(length):
         maxHeap.insert(S[i])
+
 
     # condition to terminate is that both children of the max heap will be zeroes
     #the way we programmed, the left child is always smaller than the right child
@@ -126,33 +128,46 @@ def karmarkar(S):
             maxHeap.maxHeapify(3)
             maxHeap.maxHeapify(1)
             # print(maxHeap.Heap)
-        
-        # maxHeap.maxHeap()
 
-    return maxHeap.Heap[1]
+    print(maxHeap.Heap[1])
+
+
+# the following function generates a set of 100 random integers each of
+# which is in the range (1, 10^12)
+def random_number_generator():
+    arr = []
+    
+    for i in range(100):
+        rand_number = random.randrange(1, 10**12)
+        arr.append(rand_number)
+
+    return arr
+
+
+
 
 
 
   
 # Driver Code 
 if __name__ == "__main__": 
-      
-    # print('The minHeap is ') 
-    # maxHeap = MaxHeap(15) 
-    # maxHeap.insert(10) 
-    # maxHeap.insert(5) 
-    # maxHeap.insert(8) 
-    # maxHeap.insert(6) 
-    # maxHeap.insert(7) 
-    # # MaxHeap.insert(3) 
- 
- 
-    # maxHeap.maxHeap() 
-  
-    # maxHeap.Print() 
-    # print("The Min val is " + str(maxHeap.remove()))
+    array = []
+    with open(sys.argv[3], 'r') as file:
+        dimension = int(sys.argv[2])
+        for line in file.readlines(): 
+            line = int(line)
+            array.append(line)
 
-    print(karmarkar([2,1,4,3,6,5]))
+        if int(sys.argv[2]) == 0:
+            karmarkar(array)
+
+    print(random_number_generator())
+
+
+    # # maxHeap.Print() 
+    # # print("The Min val is " + str(maxHeap.remove()))
+
+    # print(karmarkar([2,1,4,3,6,5]))
 
 
 
