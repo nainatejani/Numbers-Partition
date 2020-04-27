@@ -144,11 +144,10 @@ def random_number_generator():
     return arr
 
 
-# Given array S provided in the inputfile and n, the length of array S, create a random solution using a prepartition.
+# Given array S as input to be partitioned, the length of array S, create a random solution using a prepartition.
 def create_rand_solution_from_prepartition(S):
 
     # First, I create a prepartititon with 100 random integers each ranging from 0 to 100.
-
     P = []
     
     for i in range(100):
@@ -167,14 +166,14 @@ def create_rand_solution_from_prepartition(S):
 
 
 def prepartitioned_repeated_random(S):
-    R = create_rand_solution_from_prepartition(S)
+    R = S
 
-    max_iter = 15
+    max_iter = 25000
     for i in range(0, max_iter):
         R_prime = create_rand_solution_from_prepartition(S)
         if (karmarkar(R_prime) < karmarkar(R)):
             R = R_prime
-    return karmarkar(R)
+            print(karmarkar(R))
 
 # print(prepartitioned_repeated_random([10,8,7,6,5, 6,7,88,9,73]))
 
@@ -198,7 +197,7 @@ if __name__ == "__main__":
             print(karmarkar(array))
 
         if int(sys.argv[2]) == 11:
-            print(prepartitioned_repeated_random(array))
+            prepartitioned_repeated_random(array)
 
 
     # print(random_number_generator())
