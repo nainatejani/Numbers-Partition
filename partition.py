@@ -129,7 +129,7 @@ def karmarkar(S):
             maxHeap.maxHeapify(1)
             # print(maxHeap.Heap)
 
-    print(maxHeap.Heap[1])
+    return (maxHeap.Heap[1])
 
 
 # the following function generates a set of 100 random integers each of
@@ -138,10 +138,46 @@ def random_number_generator():
     arr = []
     
     for i in range(100):
-        rand_number = random.randrange(1, 10**12)
+        rand_number = random.randrange(1, 10**12+1)
         arr.append(rand_number)
 
     return arr
+
+
+# Given array S provided in the inputfile and n, the length of array S, create a random solution using a prepartition.
+def create_rand_solution_from_prepartition(S):
+
+    # First, I create a prepartititon with 100 random integers each ranging from 0 to 100.
+
+    P = []
+    
+    for i in range(100):
+        rand_number = random.randrange(0, 100)
+        P.append(rand_number)
+    A_prime = [0]*100
+    # print(len(A_prime))
+    for i in range(100):
+        index = P[i]
+        A_prime[index] += S[i]
+    return A_prime
+
+# print(create_rand_solution_from_prepartition([10,8,7,6,5], 5))
+
+
+
+
+def prepartitioned_repeated_random(S):
+    R = create_rand_solution_from_prepartition(S)
+
+    max_iter = 15
+    for i in range(0, max_iter):
+        R_prime = create_rand_solution_from_prepartition(S)
+        if (karmarkar(R_prime) < karmarkar(R)):
+            R = R_prime
+    return karmarkar(R)
+
+# print(prepartitioned_repeated_random([10,8,7,6,5, 6,7,88,9,73]))
+
 
 
 
@@ -151,18 +187,21 @@ def random_number_generator():
   
 # Driver Code 
 if __name__ == "__main__": 
+    # array is the input array from the autograder.
     array = []
     with open(sys.argv[3], 'r') as file:
-        dimension = int(sys.argv[2])
         for line in file.readlines(): 
             line = int(line)
             array.append(line)
 
         if int(sys.argv[2]) == 0:
-            karmarkar(array)
+            print(karmarkar(array))
 
-    print(random_number_generator())
+        if int(sys.argv[2]) == 11:
+            print(prepartitioned_repeated_random(array))
 
+
+    # print(random_number_generator())
 
     # # maxHeap.Print() 
     # # print("The Min val is " + str(maxHeap.remove()))
