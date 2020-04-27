@@ -138,7 +138,7 @@ def random_number_generator():
     arr = []
     
     for i in range(100):
-        rand_number = random.randrange(1, 10**12+1)
+        rand_number = random.randrange(0, 10**12)
         arr.append(rand_number)
 
     return arr
