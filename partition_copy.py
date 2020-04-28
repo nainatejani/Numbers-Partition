@@ -143,6 +143,48 @@ def repeatedRandom(S):
     return minResidue
 
 def hillClimbing(S):
+
+    length = len(S)
+
+    # Creating a array of +1 and -1 randomly of length length
+    R = []
+    added = 0
+    for i in range(length):
+        rand_bit = random.choice([-1, +1])
+        added += S[i]*rand_bit
+        R.append(rand_bit)
+
+    # added is equal to residue.
+    
+    minResidue = float("inf")
+
+    for i in range(25000):
+        randNum1 = random().randint(0, length)
+        randNum2 = random().randint(0, length)
+        R_p
+
+        R[randNum1] = -R[randNum1]
+        rand_number = random.random()
+        if rand_number>0.5:
+            R[randNum2] = -R[randNum2]
+        new_res = 0
+        for i in range(length):
+            new_res += R[i]*S[i]
+        if new_res < added:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     length = len(S)
     minResidue = float("inf")
     S = random.shuffle(S)
@@ -161,9 +203,28 @@ def hillClimbing(S):
         secondBin.insert(0, firstBin.pop())
     return 0
 
+
 def simulatedA(S):
     length = len(S)
+
+    # Creating a array of +1 and -1 randomly of length length
+    R = []
+    added = 0
+    for i in range(length):
+        rand_bit = random.choice([-1, +1])
+        added += S[i]*rand_bit
+        R.append(rand_bit)
+
+    # added is equal to residue.
+
     minResidue = float("inf")
+
+
+
+
+
+
+
     S = random.shuffle(S)
     residue = abs((sum(S[0:(int(length/2))])) - (sum(S[(int(length/2 + 1)):int(length)])))
     if residue < minResidue:
