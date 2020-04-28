@@ -143,65 +143,47 @@ def repeatedRandom(S):
     return minResidue
 
 def hillClimbing(S):
-
     length = len(S)
 
     # Creating a array of +1 and -1 randomly of length length
     R = []
-    added = 0
+    residue = 0
+
+    # determine the initial residue while generating random bits
     for i in range(length):
         rand_bit = random.choice([-1, +1])
-        added += S[i]*rand_bit
+        residue += S[i]*rand_bit
         R.append(rand_bit)
-
-    # added is equal to residue.
     
-    minResidue = float("inf")
-
     for i in range(25000):
-        randNum1 = random().randint(0, length)
-        randNum2 = random().randint(0, length)
-        R_p
+        randNum1 = random.randint(0, length - 1)
+        randNum2 = random.randint(0, length - 1)
 
-        R[randNum1] = -R[randNum1]
+        # do a random move
+        R[randNum1] = -1 * R[randNum1]
         rand_number = random.random()
+
+        madeMove2 = False
         if rand_number>0.5:
-            R[randNum2] = -R[randNum2]
+            R[randNum2] = -1 * R[randNum2]
+            mademove2 = True
+        
+        # find the new residue
         new_res = 0
         for i in range(length):
             new_res += R[i]*S[i]
-        if new_res < added:
 
+        # if new residue is less, then update residue
+        if abs(new_res) < abs(residue):
+            residue = abs(new_res)
 
+        # if new residue is more, reverse the changes that were just made
+        else:
+            R[randNum1] = -1 * R[randNum1]
+            if madeMove2 == True:
+                R[randNum2] = -1 * R[randNum2]
 
-
-
-
-
-
-
-
-
-
-
-
-    length = len(S)
-    minResidue = float("inf")
-    S = random.shuffle(S)
-    residue = abs((sum(S[0:(int(length/2))])) - (sum(S[(int(length/2 + 1)):int(length)])))
-    if residue < minResidue:
-        minResidue = residue
-
-    for i in range(25000):
-        randNum1 = random().randint(0, length)
-        randNum2 = random().randint(0, length)
-
-        # if randNum1 > int(length/2):
-        #     firstBin.
-
-        firstBin = random.shuffle(firstBin)
-        secondBin.insert(0, firstBin.pop())
-    return 0
+    return residue
 
 
 def simulatedA(S):
@@ -209,48 +191,46 @@ def simulatedA(S):
 
     # Creating a array of +1 and -1 randomly of length length
     R = []
-    added = 0
+    residue = 0
+
+    # determine the initial residue while generating random bits
     for i in range(length):
         rand_bit = random.choice([-1, +1])
-        added += S[i]*rand_bit
+        residue += S[i]*rand_bit
         R.append(rand_bit)
-
-    # added is equal to residue.
-
-    minResidue = float("inf")
-
-
-
-
-
-
-
-    S = random.shuffle(S)
-    residue = abs((sum(S[0:(int(length/2))])) - (sum(S[(int(length/2 + 1)):int(length)])))
-    if residue < minResidue:
-        minResidue = residue
-
+    
     for i in range(25000):
-        newS = S # make a copy of S
-        # generate a random neighbor
-        randNum1 = random().randint(0, length)
-        randNum2 = random().randint(0, length)
-        randNum3 = random().randint(0, 1)
-        
-        if randNum3 == 0: # swap elements
-            value1 = newS[randNum1]
-            newS[randNum1] = newS[randNum2]
-            newS[randNum2] = newS[randNum1]
-        else:
-            value2 = S[randNum2]
-            newS.remove(randNum2)
-            newS.insert(randNum1, value)
-            residue = abs((sum(S[0:(int(length/2))])) - (sum(S[(int(length/2 + 1)):int(length)])))
-        if residue < minResidue:
-            minResidue = residue
-            S = newS
+        randNum1 = random.randint(0, length - 1)
+        randNum2 = random.randint(0, length - 1)
 
-    return minResidue
+        # do a random move
+        R[randNum1] = -1 * R[randNum1]
+        rand_number = random.random()
+
+        madeMove2 = False
+        if rand_number>0.5:
+            R[randNum2] = -1 * R[randNum2]
+            mademove2 = True
+        
+        # find the new residue
+        new_res = 0
+        for i in range(length):
+            new_res += R[i]*S[i]
+
+        # if new residue is less, then update residue
+        if abs(new_res) < abs(residue):
+            residue = abs(new_res)
+
+        # if new residue is more, reverse the changes that were just made
+        else:
+            rand_number2 = random.random()
+            if rand_number2 < e**(-(abs(new_res) - abs(residue))/((10**10)*0.8**(i/300)):
+
+            R[randNum1] = -1 * R[randNum1]
+            if madeMove2 == True:
+                R[randNum2] = -1 * R[randNum2]
+
+    return residue
 
 
 
