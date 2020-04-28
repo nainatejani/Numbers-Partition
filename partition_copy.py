@@ -135,12 +135,24 @@ def karmarkar(S):
 def repeatedRandom(S):
     length = len(S)
     minResidue = float("inf")
+
+    # Creating a array of +1 and -1 randomly of length length
+    R = []
+
     for i in range(25000):
-        random.shuffle(S)
-        residue = abs((sum(S[0:(int(length/2))])) - (sum(S[(int(length/2 + 1)):int(length)])))
+        residue = 0
+        # randomly assign each element to a list
+        for i in range(length):
+            rand_bit = random.choice([-1, +1])
+            residue += S[i]*rand_bit
+            R.append(rand_bit)
+            
+        residue = abs(residue)
         if residue < minResidue:
             minResidue = residue
+
     return minResidue
+    
 
 def hillClimbing(S):
     length = len(S)
@@ -224,7 +236,7 @@ def simulatedA(S):
         # if new residue is more, reverse the changes that were just made
         else:
             rand_number2 = random.random()
-            if rand_number2 < e**(-(abs(new_res) - abs(residue))/((10**10)*0.8**(i/300)):
+            # if rand_number2 < e**(-1 *((abs(new_res) - abs(residue))/((10**10)*0.8**(i/300))):
 
             R[randNum1] = -1 * R[randNum1]
             if madeMove2 == True:
