@@ -1,5 +1,6 @@
 import sys 
 import random
+import math
 
 class MaxHeap: 
   
@@ -198,6 +199,9 @@ def hillClimbing(S):
     return residue
 
 
+def T(iteration):
+    return (10**10)* (0.8)**(math.floor(iteration/300))
+
 def simulatedA(S):
     length = len(S)
 
@@ -210,19 +214,23 @@ def simulatedA(S):
         rand_bit = random.choice([-1, +1])
         residue += S[i]*rand_bit
         R.append(rand_bit)
+    print(abs(residue))
+    R_double_prime = R
     
     for i in range(25000):
         randNum1 = random.randint(0, length - 1)
         randNum2 = random.randint(0, length - 1)
 
         # do a random move
-        R[randNum1] = -1 * R[randNum1]
+        R_prime = R
+        R_prime[randNum1] = -1 * R[randNum1]
         rand_number = random.random()
 
         madeMove2 = False
         if rand_number>0.5:
-            R[randNum2] = -1 * R[randNum2]
+            R_prime[randNum2] = -1 * R[randNum2]
             mademove2 = True
+
         
         # find the new residue
         new_res = 0
@@ -230,19 +238,28 @@ def simulatedA(S):
             new_res += R[i]*S[i]
 
         # if new residue is less, then update residue
+        R_changed= False
         if abs(new_res) < abs(residue):
             residue = abs(new_res)
-
-        # if new residue is more, reverse the changes that were just made
+            R = R_prime
+            R_changed = True
         else:
-            rand_number2 = random.random()
-            # if rand_number2 < e**(-1 *((abs(new_res) - abs(residue))/((10**10)*0.8**(i/300))):
+            diff_in_residues = abs(new_res) - abs(residue)
+            prob = math.exp(-diff_in_residues/T(10**5))
+            rand_number = random.random()
+            if rand_number < prob:
+                R = R_prime
+        if new_res < residue:
+            R_double_prime = R
 
-            R[randNum1] = -1 * R[randNum1]
-            if madeMove2 == True:
-                R[randNum2] = -1 * R[randNum2]
+    final_res = 0
+    print("i  here")
+    # print(R_double_prime)
+    for i in range(length):
+        final_res += S[i]*R_double_prime[i]
+    # print(abs(final_res))
+    return abs(final_res)
 
-    return residue
 
 
 
@@ -278,7 +295,6 @@ if __name__ == "__main__":
             print(hillClimbing(array))
 
         if int(sys.argv[2]) == 3:
-            simulatedA(array)
             print(simulatedA(array))
 
 
