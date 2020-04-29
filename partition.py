@@ -261,7 +261,7 @@ def simulatedA(S):
 def create_rand_solution_from_prepartition(S, n):
     # First, I create a prepartititon with 100 random integers each ranging from 0 to 99.
     P = []
-    Anew = [0]*100
+    Anew = [0]*n
 
     for i in range(n):
         rand_number = random.randrange(0, n)
@@ -285,6 +285,17 @@ def prepartitioned_repeated_random(S):
             minResidue1 = newResidue
 
     return minResidue1
+
+
+def prepartitioned_hill_climbing(S):
+    n = len(S)
+    R = create_rand_solution_from_prepartition(S, n)
+    minResidue1 = abs(karmarkar(R))
+
+    max_iter = 25000
+
+    for i in range(max_iter)
+
 
 
 

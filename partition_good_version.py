@@ -1,6 +1,5 @@
 import sys 
 import random
-import math
 
 class MaxHeap: 
   
@@ -127,9 +126,8 @@ def karmarkar(S):
             maxHeap.Heap[3] = 0
             maxHeap.maxHeapify(3)
             maxHeap.maxHeapify(1)
-            # print(maxHeap.Heap)
 
-    print(maxHeap.Heap[1])
+    return(maxHeap.Heap[1])
 
 # starting below are things Michael added
 
@@ -147,7 +145,7 @@ def repeatedRandom(S):
             rand_bit = random.choice([-1, +1])
             residue += S[i]*rand_bit
             R.append(rand_bit)
-            
+
         residue = abs(residue)
         if residue < minResidue:
             minResidue = residue
@@ -199,10 +197,10 @@ def hillClimbing(S):
     return residue
 
 
-def T(iteration):
-    return (10**10)* (0.8)**(math.floor(iteration/300))
-
 def simulatedA(S):
+    import random
+    import math
+
     length = len(S)
 
     # Creating a array of +1 and -1 randomly of length length
@@ -214,23 +212,25 @@ def simulatedA(S):
         rand_bit = random.choice([-1, +1])
         residue += S[i]*rand_bit
         R.append(rand_bit)
-    print(abs(residue))
-    R_double_prime = R
+
+    # make sure residue is positive
+    residue = abs(residue)
+
+    # keep track of the R that corresponds to the minimum residue so far
+    Rlowest = R
     
     for i in range(25000):
-        randNum1 = random.randint(0, length - 1)
-        randNum2 = random.randint(0, length - 1)
+        randNum1 = random.randrange(0, length - 1)
+        randNum2 = random.randrange(0, length - 1)
 
         # do a random move
-        R_prime = R
-        R_prime[randNum1] = -1 * R[randNum1]
-        rand_number = random.random()
+        R[randNum1] = -1 * R[randNum1]
+        rand_number = (random.randint(0, 10000000) % 100) / 100
 
         madeMove2 = False
         if rand_number>0.5:
-            R_prime[randNum2] = -1 * R[randNum2]
+            R[randNum2] = -1 * R[randNum2]
             mademove2 = True
-
         
         # find the new residue
         new_res = 0
@@ -238,27 +238,73 @@ def simulatedA(S):
             new_res += R[i]*S[i]
 
         # if new residue is less, then update residue
-        R_changed= False
-        if abs(new_res) < abs(residue):
+        if abs(new_res) < residue:
             residue = abs(new_res)
-            R = R_prime
-            R_changed = True
-        else:
-            diff_in_residues = abs(new_res) - abs(residue)
-            prob = math.exp(-diff_in_residues/T(10**5))
-            rand_number = random.random()
-            if rand_number < prob:
-                R = R_prime
-        if new_res < residue:
-            R_double_prime = R
 
-    final_res = 0
-    print("i  here")
-    # print(R_double_prime)
-    for i in range(length):
-        final_res += S[i]*R_double_prime[i]
-    # print(abs(final_res))
-    return abs(final_res)
+        # if new residue is more, reverse the changes that were just made but have a probability that the change is kept
+        else:
+            diff_in_residues = abs(new_res) - residue
+            prob = math.exp(-diff_in_residues/((10**10)*(0.8)**(i / 300)))
+            randNum3 = (random.randint(0, 10000000) % 100) / 100
+            if randNum3 > prob: # notice that there's a probability that the changes will not be reversed even if it's not a helpful move
+                R[randNum1] = -1 * R[randNum1]
+                if madeMove2 == True:
+                    R[randNum2] = -1 * R[randNum2]
+
+        if residue > abs(new_res):
+            Rlowest = R
+            residue = abs(new_res)
+
+    return residue
+
+
+# Given array S provided in the inputfile and n, the length of array S, create a random solution using a prepartition.
+def create_rand_solution_from_prepartition(S):
+
+    # First, I create a prepartititon with 100 random integers each ranging from 0 to 100.
+    print(str(S)+ "i am S")
+    P = []
+    
+    for i in range(100):
+        rand_number = random.randrange(0, 100)
+        P.append(rand_number)
+
+    A_prime = [0]*100
+
+    for i in range(100):
+        index = P[i]
+        A_prime[index] += S[i]
+    return A_prime
+
+# print(create_rand_solution_from_prepartition([10,8,7,6,5], 5))
+
+
+
+
+def prepartitioned_repeated_random(S):
+    R = create_rand_solution_from_prepartition(S)
+
+    max_iter = 5
+    for i in range(0, max_iter):
+        print(str(i) + " max_iter")
+        print("this is before andom solution")
+
+        R_prime = create_rand_solution_from_prepartition(S)
+        print("hi i finished")
+        res_R = karmarkar(R)
+        res_R_prime = karmarkar(R_prime)
+
+        if res_R_prime < res_R:
+            R = R_prime
+
+
+    return res_R
+
+# print(prepartitioned_repeated_random([10,8,7,6,5, 6,7,88,9,73]))
+
+
+
+
 
 
 
@@ -285,6 +331,7 @@ if __name__ == "__main__":
 
         if int(sys.argv[2]) == 0:
             karmarkar(array)
+            print(karmarkar(array))
 
         if int(sys.argv[2]) == 1:
             repeatedRandom(array)
@@ -295,7 +342,13 @@ if __name__ == "__main__":
             print(hillClimbing(array))
 
         if int(sys.argv[2]) == 3:
+            simulatedA(array)
             print(simulatedA(array))
+
+        if int(sys.argv[2]) == 11:
+            prepartitioned_repeated_random(array)
+
+
 
 
 
