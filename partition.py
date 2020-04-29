@@ -331,57 +331,50 @@ def prepartitioned_hill_climbing(S):
             R[randNum2] = randNum2newLocation # move to a different group
             madeMove2 = True
 
-
-
         # now find new residue
-
-
         S_prime = createSolutionFromP(R, S)
         new_res = karmarkar(S_prime) # we might to represent the random moves differently
 
         # if new residue is less, then update residue
-        if abs(new_res) < abs(minResidue1):
+        if abs(new_res) < abs(residue):
             residue = abs(new_res)
 
         # if new residue is more, reverse the changes that were just made
         else:
             R = R_orig
-
-        return residue
+    return residue
 
 def prepartitioned_simulated_annealing(S):
-    length = len(S)
+    n = len(S)
     R = createrandP(n)
+    Rlowest = R # keep track of the R that corresponds to the minimum residue so far
     residue = abs(karmarkar(createSolutionFromP(R, S)))
 
+    iterations = 25000
+    for k in range(0, iterations):
+        R_orig = R
+        randNum1 = random.randint(0, n - 1)
+        randNum1newLocation = random.randint(0, n - 1)
 
-    # keep track of the R that corresponds to the minimum residue so far
-    Rlowest = R
-    max_iter = 25000
-    
-    for i in range(max_iter):
-        randNum1 = random.randrange(0, length - 1)
-        randNum2 = random.randrange(0, length - 1)
+        randNum2 = random.randint(0, n - 1)
+        randNum2newLocation = random.randint(0, n - 1)
 
         # do a random move
-        R[randNum1] = -1 * R[randNum1]
-        rand_number = (random.randint(0, 10000000) % 100) / 100
+        R[randNum1] = randNum1newLocation # move to a different group
+        rand_number = random.random()
 
         madeMove2 = False
         if rand_number>0.5:
-            R[randNum2] = -1 * R[randNum2]
-            mademove2 = True
-        
-        # find the new residue
-        new_res = 0
-        for i in range(length):
-            new_res += R[i]*S[i]
+            R[randNum2] = randNum2newLocation # move to a different group
+            madeMove2 = True
+
+        # now find new residue
+        S_prime = createSolutionFromP(R, S)
+        new_res = karmarkar(S_prime) # we might to represent the random moves differently
 
         # if new residue is less, then update residue
-        if abs(new_res) < residue:
+        if abs(new_res) < abs(residue):
             residue = abs(new_res)
-
-
 
         # if new residue is more, reverse the changes that were just made but have a probability that the change is kept
         else:
@@ -389,15 +382,14 @@ def prepartitioned_simulated_annealing(S):
             prob = math.exp(-diff_in_residues/((10**10)*(0.8)**(i / 300)))
             randNum3 = (random.randint(0, 10000000) % 100) / 100
             if randNum3 > prob: # notice that there's a probability that the changes will not be reversed even if it's not a helpful move
-                R[randNum1] = -1 * R[randNum1]
-                if madeMove2 == True:
-                    R[randNum2] = -1 * R[randNum2]
+                R = R_orig
 
         if residue > abs(new_res):
             Rlowest = R
             residue = abs(new_res)
 
     return residue
+
 
 
 # the following function generates a set of 100 random integers each of
@@ -420,29 +412,28 @@ if __name__ == "__main__":
         for line in file.readlines(): 
             line = int(line)
             array.append(line)
-
         if int(sys.argv[2]) == 0:
             result = karmarkar(array)
             print(result)
-
         if int(sys.argv[2]) == 1:
             result = repeatedRandom(array)
             print(result)
-
         if int(sys.argv[2]) == 2:
             result = hillClimbing(array)
             print(result)
-
         if int(sys.argv[2]) == 3:
             result = simulatedA(array)
             print(result)
-
         if int(sys.argv[2]) == 11:
             result = prepartitioned_repeated_random(array)
             print(result)
         if int(sys.argv[2]) == 12:
-            result = prepartitioned_repeated_random(array)
+            result = prepartitioned_hill_climbing(array)
             print(result)
+        if int(sys.argv[2]) == 13:
+            result = prepartitioned_hill_climbing(array)
+            print(result)
+
 
 
 
