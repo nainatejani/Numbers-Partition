@@ -177,7 +177,7 @@ def hillClimbing(S):
         madeMove2 = False
         if rand_number>0.5:
             R[randNum2] = -1 * R[randNum2]
-            mademove2 = True
+            madeMove2 = True
         
         # find the new residue
         new_res = 0
@@ -259,7 +259,7 @@ def simulatedA(S):
 
 # Given array S provided in the inputfile and n, the length of array S, create a random solution using a prepartition.
 def create_rand_solution_from_prepartition(S, n):
-    # First, I create a prepartititon with 100 random integers each ranging from 0 to 99.
+    # First, I create a prepartititon with n random integers each ranging from 0 to n.
     P = []
     Anew = [0]*n
 
@@ -267,7 +267,7 @@ def create_rand_solution_from_prepartition(S, n):
         rand_number = random.randrange(0, n)
         P.append(rand_number)
         index = P[i]
-        Anew[index] += S[i] # for some reason there is an error in accessing S[i] on the very last iteration
+        Anew[index] += S[i]
 
     return Anew
 
@@ -286,22 +286,52 @@ def prepartitioned_repeated_random(S):
 
     return minResidue1
 
+# def createrandP(S, n):
+#     # First, I create a prepartititon with n random integers each ranging from 0 to n.
+#     P = []
+
+#     for i in range(n):
+#         rand_number = random.randrange(0, n)
+#         P.append(rand_number)
+
+#     return P
 
 def prepartitioned_hill_climbing(S):
     n = len(S)
     R = create_rand_solution_from_prepartition(S, n)
     minResidue1 = abs(karmarkar(R))
 
-    max_iter = 25000
+    iterations = 25000
+    for k in range(0, iterations):
+        randNum1 = random.randint(0, n - 1)
+        randNum1newLocation = random.randint(0, n - 1)
 
-    for i in range(max_iter)
+        randNum2 = random.randint(0, n - 1)
+        randNum2newLocation = random.randint(0, n - 1)
 
+        # do a random move
+        R[randNum1] = randNum1newLocation # move to a different group
+        rand_number = random.random()
 
+        madeMove2 = False
+        if rand_number>0.5:
+            R[randNum2] = randNum2newLocation # move to a different group
+            madeMove2 = True
 
+        # now find new residue
+        new_res = karmarkar(R) # we might to represent the random moves differently
 
+        # if new residue is less, then update residue
+        if abs(new_res) < abs(minResidue1):
+            residue = abs(new_res)
 
+        # if new residue is more, reverse the changes that were just made
+        # else:
+        #     R[randNum1] = -1 * R[randNum1]
+        #     if madeMove2 == True:
+        #         R[randNum2] = -1 * R[randNum2]
 
-
+        return minResidue1
 
 
 
