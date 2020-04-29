@@ -126,9 +126,8 @@ def karmarkar(S):
             maxHeap.Heap[3] = 0
             maxHeap.maxHeapify(3)
             maxHeap.maxHeapify(1)
-            # print(maxHeap.Heap)
 
-    print(maxHeap.Heap[1])
+    return(maxHeap.Heap[1])
 
 # starting below are things Michael added
 
@@ -214,6 +213,9 @@ def simulatedA(S):
         residue += S[i]*rand_bit
         R.append(rand_bit)
 
+    # make sure residue is positive
+    residue = abs(residue)
+
     # keep track of the R that corresponds to the minimum residue so far
     Rlowest = R
     
@@ -236,15 +238,15 @@ def simulatedA(S):
             new_res += R[i]*S[i]
 
         # if new residue is less, then update residue
-        if abs(new_res) < abs(residue):
+        if abs(new_res) < residue:
             residue = abs(new_res)
 
         # if new residue is more, reverse the changes that were just made but have a probability that the change is kept
         else:
-            diff_in_residues = abs(new_res) - abs(residue)
+            diff_in_residues = abs(new_res) - residue
             prob = math.exp(-diff_in_residues/((10**10)*(0.8)**(i / 300)))
-            random = (random.randint(0, 10000000) % 100) / 100
-            if rand_number > prob: # notice that there's a probability that the changes will not be reversed even if it's not a helpful move
+            randNum3 = (random.randint(0, 10000000) % 100) / 100
+            if randNum3 > prob: # notice that there's a probability that the changes will not be reversed even if it's not a helpful move
                 R[randNum1] = -1 * R[randNum1]
                 if madeMove2 == True:
                     R[randNum2] = -1 * R[randNum2]
@@ -254,6 +256,41 @@ def simulatedA(S):
             residue = abs(new_res)
 
     return residue
+
+# Given array S provided in the inputfile and n, the length of array S, create a random solution using a prepartition.
+def create_rand_solution_from_prepartition(S):
+    # First, I create a prepartititon with 100 random integers each ranging from 0 to 99.
+    P = []
+    Anew = [0]*100
+
+    for i in range(0, 99):
+        rand_number = random.randrange(0, 99)
+        P.append(rand_number)
+        index = P[i]
+        Anew[index] += S[i] # for some reason there is an error in accessing S[i] on the very last iteration
+
+    return Anew
+
+def prepartitioned_repeated_random(S):
+    R = create_rand_solution_from_prepartition(S)
+    minResidue1 = abs(karmarkar(R))
+
+    max_iter = 100
+    for k in range(0, max_iter - 1):
+        R_prime = create_rand_solution_from_prepartition(S) # see which random prepartition works best
+        newResidue = abs(karmarkar(R_prime))
+        if (newResidue < minResidue1):
+            R = R_prime
+            minResidue1 = newResidue
+
+    return minResidue1
+
+
+
+
+
+
+
 
 
 # the following function generates a set of 100 random integers each of
@@ -278,6 +315,7 @@ if __name__ == "__main__":
 
         if int(sys.argv[2]) == 0:
             karmarkar(array)
+            print(karmarkar(array))
 
         if int(sys.argv[2]) == 1:
             repeatedRandom(array)
@@ -290,6 +328,11 @@ if __name__ == "__main__":
         if int(sys.argv[2]) == 3:
             simulatedA(array)
             print(simulatedA(array))
+
+        if int(sys.argv[2]) == 11:
+            prepartitioned_repeated_random(array)
+            prepartitioned_repeated_random(simulatedA(array))
+
 
 
 
