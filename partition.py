@@ -286,20 +286,32 @@ def prepartitioned_repeated_random(S):
 
     return minResidue1
 
-# def createrandP(S, n):
-#     # First, I create a prepartititon with n random integers each ranging from 0 to n.
-#     P = []
+def createrandP(n):
+    # First, I create a prepartititon with n random integers each ranging from 0 to n.
+    P = []
 
-#     for i in range(n):
-#         rand_number = random.randrange(0, n)
-#         P.append(rand_number)
+    for i in range(n):
+        rand_number = random.randrange(0, n)
+        P.append(rand_number)
 
-#     return P
+    return P
+
+def createSolutionFromP(P, S):
+    n = len(P)
+    Anew = [0]*n
+
+    for i in range(n):
+        index = P[i]
+        Anew[index] += S[i]
+
+    return Anew
+# print(createSolutionFromP([1,2,2,1]))
+
 
 def prepartitioned_hill_climbing(S):
     n = len(S)
-    R = create_rand_solution_from_prepartition(S, n)
-    minResidue1 = abs(karmarkar(R))
+    R = createrandP(n)
+    residue = abs(karmarkar(createSolutionFromP(R, S)))
 
     iterations = 25000
     for k in range(0, iterations):
@@ -319,7 +331,10 @@ def prepartitioned_hill_climbing(S):
             madeMove2 = True
 
         # now find new residue
-        new_res = karmarkar(R) # we might to represent the random moves differently
+
+
+        S_prime = createSolutionFromP(R, S)
+        new_res = karmarkar(S_prime) # we might to represent the random moves differently
 
         # if new residue is less, then update residue
         if abs(new_res) < abs(minResidue1):
@@ -331,9 +346,57 @@ def prepartitioned_hill_climbing(S):
         #     if madeMove2 == True:
         #         R[randNum2] = -1 * R[randNum2]
 
-        return minResidue1
+        return residue
+
+def prepartitioned_simulated_annealing(S):
+    length = len(S)
+    R = createrandP(n)
+    residue = abs(karmarkar(createSolutionFromP(R, S)))
 
 
+    # keep track of the R that corresponds to the minimum residue so far
+    Rlowest = R
+    max_iter = 25000
+    
+    for i in range(max_iter):
+        randNum1 = random.randrange(0, length - 1)
+        randNum2 = random.randrange(0, length - 1)
+
+        # do a random move
+        R[randNum1] = -1 * R[randNum1]
+        rand_number = (random.randint(0, 10000000) % 100) / 100
+
+        madeMove2 = False
+        if rand_number>0.5:
+            R[randNum2] = -1 * R[randNum2]
+            mademove2 = True
+        
+        # find the new residue
+        new_res = 0
+        for i in range(length):
+            new_res += R[i]*S[i]
+
+        # if new residue is less, then update residue
+        if abs(new_res) < residue:
+            residue = abs(new_res)
+
+
+
+        # if new residue is more, reverse the changes that were just made but have a probability that the change is kept
+        else:
+            diff_in_residues = abs(new_res) - residue
+            prob = math.exp(-diff_in_residues/((10**10)*(0.8)**(i / 300)))
+            randNum3 = (random.randint(0, 10000000) % 100) / 100
+            if randNum3 > prob: # notice that there's a probability that the changes will not be reversed even if it's not a helpful move
+                R[randNum1] = -1 * R[randNum1]
+                if madeMove2 == True:
+                    R[randNum2] = -1 * R[randNum2]
+
+        if residue > abs(new_res):
+            Rlowest = R
+            residue = abs(new_res)
+
+    return residue
 
 
 # the following function generates a set of 100 random integers each of
@@ -349,6 +412,7 @@ def random_number_generator():
   
 # Driver Code 
 if __name__ == "__main__": 
+    pass
     array = []
     with open(sys.argv[3], 'r') as file:
         dimension = int(sys.argv[2])
@@ -373,6 +437,9 @@ if __name__ == "__main__":
             print(result)
 
         if int(sys.argv[2]) == 11:
+            result = prepartitioned_repeated_random(array)
+            print(result)
+        if int(sys.argv[2]) == 12:
             result = prepartitioned_repeated_random(array)
             print(result)
 
