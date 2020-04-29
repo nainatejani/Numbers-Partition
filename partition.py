@@ -345,6 +345,8 @@ def prepartitioned_hill_climbing(S):
     return residue
 
 def prepartitioned_simulated_annealing(S):
+    import math
+
     n = len(S)
     R = createrandP(n)
     Rlowest = R # keep track of the R that corresponds to the minimum residue so far
@@ -379,7 +381,7 @@ def prepartitioned_simulated_annealing(S):
         # if new residue is more, reverse the changes that were just made but have a probability that the change is kept
         else:
             diff_in_residues = abs(new_res) - residue
-            prob = math.exp(-diff_in_residues/((10**10)*(0.8)**(i / 300)))
+            prob = math.exp(-diff_in_residues/((10**10)*(0.8)**(k / 300)))
             randNum3 = (random.randint(0, 10000000) % 100) / 100
             if randNum3 > prob: # notice that there's a probability that the changes will not be reversed even if it's not a helpful move
                 R = R_orig
@@ -431,7 +433,7 @@ if __name__ == "__main__":
             result = prepartitioned_hill_climbing(array)
             print(result)
         if int(sys.argv[2]) == 13:
-            result = prepartitioned_hill_climbing(array)
+            result = prepartitioned_simulated_annealing(array)
             print(result)
 
 
