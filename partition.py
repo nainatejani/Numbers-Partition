@@ -1,5 +1,6 @@
 import sys 
 import random
+import time
 
 class MaxHeap: 
   
@@ -398,7 +399,6 @@ def prepartitioned_simulated_annealing(S):
 # which is in the range (1, 10^12)
 def random_number_generator():
     arr = []
-    
     for i in range(100):
         rand_number = random.randrange(1, 10**12)
         arr.append(rand_number)
@@ -414,36 +414,62 @@ if __name__ == "__main__":
         for line in file.readlines(): 
             line = int(line)
             array.append(line)
-        if int(sys.argv[2]) == 0:
-            result = karmarkar(array)
-            print(result)
-        if int(sys.argv[2]) == 1:
-            result = repeatedRandom(array)
-            print(result)
-        if int(sys.argv[2]) == 2:
-            result = hillClimbing(array)
-            print(result)
-        if int(sys.argv[2]) == 3:
-            result = simulatedA(array)
-            print(result)
-        if int(sys.argv[2]) == 11:
-            result = prepartitioned_repeated_random(array)
-            print(result)
-        if int(sys.argv[2]) == 12:
-            result = prepartitioned_hill_climbing(array)
-            print(result)
-        if int(sys.argv[2]) == 13:
-            result = prepartitioned_simulated_annealing(array)
-            print(result)
+        # if int(sys.argv[2]) == 0:
+        #     result = karmarkar(array)
+        #     print(result)
+        # if int(sys.argv[2]) == 1:
+        #     result = repeatedRandom(array)
+        #     print(result)
+        # if int(sys.argv[2]) == 2:
+        #     result = hillClimbing(array)
+        #     print(result)
+        # if int(sys.argv[2]) == 3:
+        #     result = simulatedA(array)
+        #     print(result)
+        # if int(sys.argv[2]) == 11:
+        #     result = prepartitioned_repeated_random(array)
+        #     print(result)
+        # if int(sys.argv[2]) == 12:
+        #     result = prepartitioned_hill_climbing(array)
+        #     print(result)
+        # if int(sys.argv[2]) == 13:
+        #     result = prepartitioned_simulated_annealing(array)
+        #     print(result)
+
+    start = time.time()
+    res  = 0
+    maximum = float("-inf")
+    minimum = float("inf")
+
+    for i in range(100):
+        S = random_number_generator()
+        res += prepartitioned_simulated_annealing(S)
+        if res > maximum:
+            maximum = res
+        if res < minimum:
+            minimum = res
+    result ((res/100), maximum, minimum)
+    end = time.time()
+    print(end - start)
 
 
 
 
 
-    # print(random_number_generator())
 
 
-    # # maxHeap.Print() 
-    # # print("The Min val is " + str(maxHeap.remove()))
 
-    # print(karmarkar([2,1,4,3,6,5]))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
