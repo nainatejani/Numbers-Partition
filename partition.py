@@ -315,6 +315,7 @@ def prepartitioned_hill_climbing(S):
 
     iterations = 25000
     for k in range(0, iterations):
+        R_orig = R
         randNum1 = random.randint(0, n - 1)
         randNum1newLocation = random.randint(0, n - 1)
 
@@ -330,6 +331,8 @@ def prepartitioned_hill_climbing(S):
             R[randNum2] = randNum2newLocation # move to a different group
             madeMove2 = True
 
+
+
         # now find new residue
 
 
@@ -341,10 +344,8 @@ def prepartitioned_hill_climbing(S):
             residue = abs(new_res)
 
         # if new residue is more, reverse the changes that were just made
-        # else:
-        #     R[randNum1] = -1 * R[randNum1]
-        #     if madeMove2 == True:
-        #         R[randNum2] = -1 * R[randNum2]
+        else:
+            R = R_orig
 
         return residue
 
